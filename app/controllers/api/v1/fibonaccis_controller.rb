@@ -2,15 +2,14 @@ class Api::V1::FibonaccisController < ApplicationController
 
     require 'benchmark'
 
-    # GET /fibonacci
+    # GET /fibonaccis
     def index
         @fibos = Fibonacci.all
         render json: @fibos, except: [:id]
     end
 
-    # POST /fibonacci
+    # POST /fibonaccis
     def create
-        #puts ">> #{params}"
         if params[:n].present?       
             @fibo = Fibonacci.new() 
             value = params[:n].to_i 
@@ -18,10 +17,15 @@ class Api::V1::FibonaccisController < ApplicationController
             time_s = Benchmark.measure {
                 @fibo.result = fibonacci(value) 
             }
+            #transform to milliseconds
             time_ms = time_s.real*1000
             @fibo.runtime = time_ms.to_s
     
-            render json: @fibo
+            if @fibo.save
+                render json: @fibo, except: [:id], status: :created
+            else
+                render json: @fibo.errors, status: :unprocessable_entity
+            end
         else
             render json: {error: 'Required parameter \'n\' is missing'}, status: :bad_request
         end        
