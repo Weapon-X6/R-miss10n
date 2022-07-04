@@ -4,7 +4,7 @@ class Api::V1::FibonaccisController < ApplicationController
 
     # GET /fibonaccis
     def index
-        @fibos = Fibonacci.all
+        @fibos = Fibonacci.last(10).reverse
         render json: @fibos, except: [:id]
     end
 
@@ -19,10 +19,10 @@ class Api::V1::FibonaccisController < ApplicationController
             }
             #transform to milliseconds
             time_ms = time_s.real*1000
-            @fibo.runtime = time_ms.to_s
+            @fibo.runtime = time_ms
     
             if @fibo.save
-                render json: @fibo, except: [:id], status: :created
+                render json: @fibo, except: [:id, :created_at], status: :created
             else
                 render json: @fibo.errors, status: :unprocessable_entity
             end
