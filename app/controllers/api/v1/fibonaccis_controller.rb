@@ -1,5 +1,7 @@
 class Api::V1::FibonaccisController < ApplicationController
 
+    require 'benchmark'
+
     # GET /fibonacci
     def index
         @fibos = Fibonacci.all
@@ -13,8 +15,11 @@ class Api::V1::FibonaccisController < ApplicationController
             @fibo = Fibonacci.new() 
             value = params[:n].to_i 
             @fibo.value = value
-            @fibo.result = fibonacci(value) 
-            #@fibo.runtime = _PEND
+            time_s = Benchmark.measure {
+                @fibo.result = fibonacci(value) 
+            }
+            time_ms = time_s.real*1000
+            @fibo.runtime = time_ms.to_s
     
             render json: @fibo
         else

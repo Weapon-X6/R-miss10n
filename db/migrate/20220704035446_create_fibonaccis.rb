@@ -3,7 +3,7 @@ class CreateFibonaccis < ActiveRecord::Migration[6.1]
     create_table :fibonaccis do |t|
       t.integer :value
       t.integer :result
-      t.integer :runtime
+      t.string :runtime
 
       t.datetime :created_at
     end

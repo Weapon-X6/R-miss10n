@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_04_035446) do
+ActiveRecord::Schema.define(version: 2022_07_04_044500) do
 
   create_table "fibonaccis", force: :cascade do |t|
     t.integer "value"
     t.integer "result"
-    t.integer "runtime"
+    t.string "runtime"
     t.datetime "created_at"
   end
 
