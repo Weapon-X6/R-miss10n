@@ -10,21 +10,25 @@ class Api::V1::FibonaccisController < ApplicationController
 
     # POST /fibonaccis
     def create
-        if params[:n].present?       
-            @fibo = Fibonacci.new() 
-            value = params[:n].to_i 
-            @fibo.value = value
-            time_s = Benchmark.measure {
-                @fibo.result = fibonacci(value) 
-            }
-            #transform to milliseconds
-            time_ms = time_s.real*1000
-            @fibo.runtime = time_ms
-    
-            if @fibo.save
-                render json: @fibo, except: [:id, :created_at], status: :created
+        if params[:n].present?    
+            if params[:n].class == Integer
+                @fibo = Fibonacci.new() 
+                value = params[:n].to_i 
+                @fibo.value = value
+                time_s = Benchmark.measure {
+                    @fibo.result = fibonacci(value) 
+                }
+                #transform to milliseconds
+                time_ms = time_s.real*1000
+                @fibo.runtime = time_ms
+        
+                if @fibo.save
+                    render json: @fibo, except: [:id, :created_at], status: :created
+                else
+                    render json: @fibo.errors, status: :unprocessable_entity
+                end
             else
-                render json: @fibo.errors, status: :unprocessable_entity
+                render json: {error: 'Wrong value for parameter \'n\', it should be an integer'}, status: :bad_request
             end
         else
             render json: {error: 'Required parameter \'n\' is missing'}, status: :bad_request
