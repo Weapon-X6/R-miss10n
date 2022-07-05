@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Fibonacci, type: :model do
-  #pending "add some examples to (or delete) #{__FILE__}"
+  # pending "add some examples to (or delete) #{__FILE__}"
   # calculation { Fibonacci.new }
   # it "Is valid with just passing the value" do
   #   calculation.value = 3
